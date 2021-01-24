@@ -1,5 +1,9 @@
 pipeline {
      agent any
+     environment {
+        DOCKER_LOGIN = credentials('docker-login')
+        DOCKER_PASSWORD = credentials('docker-password')
+     }     
      stages {
           stage("Compile") {
                steps {
@@ -44,6 +48,7 @@ pipeline {
 		  } 
 		  stage("Docker push") {
 		     steps {
+		     	  sh "docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD"
 		          sh "docker push skyglass/calculator"
 		     }
 		  }
